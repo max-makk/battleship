@@ -1,6 +1,16 @@
+
 import './style.css'
 import Gameboard from './Gameboard'
 import Ship from './Ship'
+
+const startBtn = document.querySelector('.start')
+const randomBtn = document.querySelector('.random')
+randomBtn.addEventListener('click', () => {
+  player.cleanBoard()
+  player.randomLocationShips()
+})
+
+let isGameStart = false
 
 const player = new Gameboard()
 const bot = new Gameboard()
@@ -18,6 +28,19 @@ let isDragged = false
 
 let dragShip = {}
 
+randomBtn.addEventListener('click', () => {
+  player.cleanBoard()
+  player.randomLocationShips()
+  eraseShips()
+  drawShips()
+})
+
+const restoreShip = () => {
+  const ship = new Ship(player, dragShip)
+  ship.createShip()
+  drawShip(ship.arrDecks, ship.shipname)
+}
+
 const dragStart = (e) => {
   isDragged = true
   removeShip(e.target.getAttribute('data-name'))
@@ -25,7 +48,13 @@ const dragStart = (e) => {
 
 const dragEnd = (e) => {
   if(!isDragged) return
-  const str = e.target.id
+  isDragged = false
+  const str = e.target.getAttribute('data-xy')
+  if(!str || !e.target.closest('.player')) {
+    restoreShip()
+    dragShip = {}
+    return
+  }
   const [x, y] = str.split('').map(i => Number(i))
   const obj = {x, y, kx: dragShip.kx, ky: dragShip.ky}
   const result = player.checkLocationShip(obj, dragShip.decks)
@@ -35,13 +64,10 @@ const dragEnd = (e) => {
     const ship = new Ship(player, obj)
     ship.createShip()
     drawShip(ship.arrDecks, ship.shipname)
-  } else if (!e.target.closest('.player') || !result) {
-    const ship = new Ship(player, dragShip)
-    ship.createShip()
-    drawShip(ship.arrDecks, ship.shipname)
+  } else {
+    restoreShip()
   }
   dragShip = {}
-  isDragged = false
 }
 
 const rotateShip = (e) => {
@@ -65,7 +91,7 @@ document.addEventListener('mouseup', dragEnd)
 const drawShip = (arr, i) => {
   arr.forEach(el => {
    const pos = el.join('')
-   const c = document.getElementById(pos)
+   const c = playerGrid.querySelector(`[data-xy='${pos}']`)
    const ship = document.createElement('div')
    ship.classList.add('ship')
    ship.setAttribute('data-name', i)
@@ -78,7 +104,7 @@ const drawShip = (arr, i) => {
 player.matrix.forEach((el, i) => {
   el.forEach((c, k) => {
     const div = document.createElement('div')
-    div.id = String(i) + String(k)
+    div.setAttribute('data-xy', String(i) + String(k))
     playerGrid.append(div)
   })
 })
@@ -87,7 +113,7 @@ player.matrix.forEach((el, i) => {
 bot.matrix.forEach((el, i) => {
   el.forEach((c, k) => {
     const div = document.createElement('div')
-    div.id = String(i) + String(k)
+    div.setAttribute('data-xy', String(i) + String(k))
     botGrid.append(div)
   })
 })
@@ -96,6 +122,12 @@ const drawShips = () => {
   for(let i in player.squadron) {
     const s = player.squadron[i]
     drawShip(s.arrDecks, i)
+  }
+}
+
+const eraseShips = () => {
+  for(let s in player.squadron) {
+   document.querySelectorAll(`[data-name=${s}]`).forEach(i => i.remove())
   }
 }
 
@@ -118,3 +150,31 @@ function removeShip(el) {
   }
   delete player.squadron[el]
 }
+
+//  random array
+
+const randomArray = () => Array(100).fill(0).map((el, i) => String(i).padStart(2,'0'))
+
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
+
+let rndCoords = []
+
+startBtn.addEventListener('click', () => {
+  isGameStart = true
+  rndCoords = shuffle(randomArray())
+})
+
+document.addEventListener('mousedown', () => {
+  if(!isGameStart) return
+  const current = rndCoords.pop()
+  playerGrid.querySelector(`[data-xy='${current}']`).classList.add('x')
+})
