@@ -15,7 +15,8 @@ export default class Gameboard {
 
   static getRandom = n => Math.floor(Math.random() * (n + 1))
 
-  constructor() {
+  constructor(field) {
+    this.field = field
     this.squadron = {}
     this.matrix = []
   }
@@ -36,6 +37,9 @@ export default class Gameboard {
         options.shipname = type + String(i + 1)
         const ship = new Ship(this, options)
         ship.createShip()
+        if (this.field.classList[0] === 'player') {
+          ship.drawShip()
+        }
       }
     }
   }

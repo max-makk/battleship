@@ -130,3 +130,7 @@ body {
   background-color: var(--navy);
   z-index: 6;
 }
+
+.highlight {
+  outline: 4px solid var(--gray);
+}
