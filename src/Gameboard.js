@@ -2,6 +2,8 @@ import Ship from './Ship'
 
 export default class Gameboard {
 
+  static started = false
+
   static SHIP_INFO = {
     fourdeck: [1, 4],
     tripledeck: [2, 3],
@@ -19,6 +21,14 @@ export default class Gameboard {
     this.field = field
     this.squadron = {}
     this.matrix = []
+  }
+
+  get isGameStarted() {
+    return Gameboard.started
+  }
+
+  set isGameStarted(value) {
+    Gameboard.started = value
   }
 
   cleanBoard() {

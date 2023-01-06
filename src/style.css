@@ -4,6 +4,16 @@
   --navy: #126e82;
   --dark: #132c33;
 
+  /* --gray: #eeeeee; */
+  /* --blue: #787a91; */
+  /* --navy: #141e61; */
+  /* --dark: #0f044c; */
+
+  --gray: #ffe459;
+  --blue: #f43b86;
+  --navy: #3d087b;
+  --dark: #11052c;
+
   box-sizing: border-box;
 }
 
@@ -132,5 +142,5 @@ body {
 }
 
 .highlight {
-  outline: 4px solid var(--gray);
+  outline: 4px solid var(--blue);
 }
