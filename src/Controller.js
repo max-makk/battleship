@@ -1,3 +1,4 @@
+import Ship from "./Ship"
 
 export default class Controller {
 
@@ -41,7 +42,7 @@ export default class Controller {
     this.bot.field.addEventListener('click', this.makeShot.bind(this))
 
     this.randomCoords = Controller.shuffle(Controller.coords())
-
+    this.opponent.field.parentElement.classList.add('highlight')
     if (this.opponent === this.player) {
       this.notify('bot first')
       setTimeout(() => this.makeShot(), 500)
@@ -115,6 +116,10 @@ export default class Controller {
     if (Object.keys(this.opponent.squadron).length === 0) {
       if (this.opponent === this.player) {
         this.notify('you looose')
+        for (let name in this.bot.squadron) {
+          const ship = this.bot.squadron[name]
+          Ship.drawShip(this.bot.field, ship.arrDecks)
+        }
       } else {
         this.notify('you wooon')
       }

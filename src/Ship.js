@@ -1,5 +1,17 @@
 
 export default class Ship {
+
+  static drawShip(field, arr) {
+    arr.forEach(el => {
+      const pos = el.join('')
+      const c = field.querySelector(`[data-xy='${pos}']`)
+      const ship = document.createElement('div')
+      ship.classList.add('ship')
+      // ship.setAttribute('data-name', this.shipname)
+      c.append(ship)
+    })
+  }
+
   constructor(board, { x, y, kx, ky, decks, shipname }) {
     this.board = board
     this.shipname = shipname
@@ -25,14 +37,4 @@ export default class Ship {
     board.squadron[shipname] = { arrDecks, hits, x, y, kx, ky }
   }
 
-  drawShip() {
-    this.arrDecks.forEach(el => {
-      const pos = el.join('')
-      const c = this.board.field.querySelector(`[data-xy='${pos}']`)
-      const ship = document.createElement('div')
-      ship.classList.add('ship')
-      ship.setAttribute('data-name', this.shipname)
-      c.append(ship)
-    })
-  }
 }
