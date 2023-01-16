@@ -2,6 +2,7 @@ import './style.css'
 import Gameboard from './Gameboard'
 import Placement from './Placement'
 import Controller from './Controller'
+import DOM from './DOM'
 
 const startBtn = document.querySelector('.start')
 const randomBtn = document.querySelector('.random')
@@ -9,22 +10,13 @@ const randomBtn = document.querySelector('.random')
 const playerGrid = document.querySelector('.player')
 const botGrid = document.querySelector('.bot')
 
-const createGrid = (grid) => {
-  for (let i = 0; i < 100; i++) {
-    const str = String(i).padStart(2, '0')
-    const div = document.createElement('div')
-    div.setAttribute('data-xy', str)
-    grid.append(div)
-  }
-}
-
-createGrid(playerGrid)
-createGrid(botGrid)
+DOM.createGrid(playerGrid)
+DOM.createGrid(botGrid)
 
 const player = new Gameboard(playerGrid)
 const bot = new Gameboard(botGrid)
 
-const playerPlacement = new Placement(player)
+new Placement(player)
 
 player.cleanBoard()
 player.randomLocationShips()
@@ -34,18 +26,22 @@ bot.randomLocationShips()
 
 randomBtn.addEventListener('click', () => {
   Gameboard.started = false
-  eraseShips()
+  DOM.createGrid(botGrid)
+  DOM.createGrid(playerGrid)
   player.cleanBoard()
   player.randomLocationShips()
+  bot.cleanBoard()
+  bot.randomLocationShips()
 })
-
-const eraseShips = () => {
-  document.querySelectorAll('.ship').forEach(i => i.remove())
-}
 
 const controller = new Controller(player, bot)
 
 startBtn.addEventListener('click', () => {
+  if(Gameboard.started === true) {
+    randomBtn.classList.add('highlight')
+    setTimeout(() => randomBtn.classList.remove('highlight'), 500)
+    return
+  }
   Gameboard.started = true
   controller.start()
 })

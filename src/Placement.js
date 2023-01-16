@@ -12,14 +12,14 @@ export default class Placement {
   }
 
   dragStart(e) {
-    if(this.board.isGameStarted) return
+    if (this.board.isGameStarted) return
     if (!e.target.classList || e.target.classList[0] !== 'ship') return
     this.isDragged = true
     this.removeShip(e.target.getAttribute('data-name'))
   }
 
   dragEnd(e) {
-    if(this.board.isGameStarted) return
+    if (this.board.isGameStarted) return
     if (!this.isDragged) return
     this.isDragged = false
     const str = e.target.getAttribute('data-xy')
@@ -35,14 +35,14 @@ export default class Placement {
       obj.decks = this.oldShip.decks
       const ship = new Ship(this.board, obj)
       ship.createShip()
-      ship.drawShip()
+      Ship.drawShip(ship.board.field, ship.arrDecks, ship.shipname)
     } else {
       this.restoreShip()
     }
   }
 
   rotateShip(e) {
-    if(this.board.isGameStarted) return
+    if (this.board.isGameStarted) return
     if (e.target.classList[0] !== 'ship') return
     this.removeShip(e.target.getAttribute('data-name'))
     const obj = { ...this.oldShip, kx: (this.oldShip.kx == 0) ? 1 : 0, ky: (this.oldShip.ky == 0) ? 1 : 0 }
@@ -50,11 +50,11 @@ export default class Placement {
     if (result) {
       const ship = new Ship(this.board, obj)
       ship.createShip()
-      ship.drawShip()
+      Ship.drawShip(ship.board.field, ship.arrDecks, ship.shipname)
     } else {
       const ship = new Ship(this.board, this.oldShip)
       ship.createShip()
-      ship.drawShip()
+      Ship.drawShip(ship.board.field, ship.arrDecks, ship.shipname)
     }
   }
 
@@ -79,7 +79,6 @@ export default class Placement {
   restoreShip() {
     const ship = new Ship(this.board, this.oldShip)
     ship.createShip()
-    ship.drawShip()
+    Ship.drawShip(ship.board.field, ship.arrDecks, ship.shipname)
   }
-
 }

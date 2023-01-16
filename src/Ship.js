@@ -1,13 +1,13 @@
 
 export default class Ship {
 
-  static drawShip(field, arr) {
+  static drawShip(field, arr, name) {
     arr.forEach(el => {
       const pos = el.join('')
       const c = field.querySelector(`[data-xy='${pos}']`)
       const ship = document.createElement('div')
       ship.classList.add('ship')
-      // ship.setAttribute('data-name', this.shipname)
+      ship.setAttribute('data-name', name)
       c.append(ship)
     })
   }

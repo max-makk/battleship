@@ -42,6 +42,8 @@ export default class Controller {
     this.bot.field.addEventListener('click', this.makeShot.bind(this))
 
     this.randomCoords = Controller.shuffle(Controller.coords())
+    this.coordsAroundHit = []
+
     this.opponent.field.parentElement.classList.add('highlight')
     if (this.opponent === this.player) {
       this.notify('bot first')
@@ -58,6 +60,7 @@ export default class Controller {
   }
 
   makeShot(e) {
+    this.opponent.field.parentElement.classList.remove('highlight')
     let x, y
     if (e !== undefined) {
       if (!e.target.getAttribute('data-xy')) return
@@ -74,6 +77,8 @@ export default class Controller {
     } else if (c === 1) {
       this.hit(x, y)
     }
+
+    this.opponent.field.parentElement.classList.add('highlight')
   }
 
   miss(x, y) {
@@ -123,6 +128,7 @@ export default class Controller {
       } else {
         this.notify('you wooon')
       }
+    this.bot.field.removeEventListener('click', this.makeShot.bind(this))
     } else if (this.opponent === this.player) {
       this.toggleLoader()
       this.currentShip.hits++
