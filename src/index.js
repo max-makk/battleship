@@ -33,6 +33,7 @@ bot.cleanBoard()
 bot.randomLocationShips()
 
 randomBtn.addEventListener('click', () => {
+  Gameboard.started = false
   eraseShips()
   player.cleanBoard()
   player.randomLocationShips()
@@ -65,8 +66,12 @@ const eraseShips = () => {
 
 // let opponent = {}
 
+const controller = new Controller(player, bot)
+
 startBtn.addEventListener('click', () => {
   Gameboard.started = true
+  controller.start()
+
   // rndCoords = shuffle(randomArray())
   // if (firstMove()) {
   //   alert('you move first')
