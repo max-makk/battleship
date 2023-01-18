@@ -1,4 +1,5 @@
 import Ship from "./Ship"
+import Gameboard from "./Gameboard"
 
 export default class Placement {
 
@@ -12,6 +13,7 @@ export default class Placement {
   }
 
   dragStart(e) {
+    if (Gameboard.isGameStarted) return
     if (this.board.isGameStarted) return
     if (!e.target.classList || e.target.classList[0] !== 'ship') return
     this.isDragged = true
@@ -19,7 +21,7 @@ export default class Placement {
   }
 
   dragEnd(e) {
-    if (this.board.isGameStarted) return
+    if (Gameboard.isGameStarted) return
     if (!this.isDragged) return
     this.isDragged = false
     const str = e.target.getAttribute('data-xy')
@@ -42,7 +44,7 @@ export default class Placement {
   }
 
   rotateShip(e) {
-    if (this.board.isGameStarted) return
+    if (Gameboard.isGameStarted) return
     if (e.target.classList[0] !== 'ship') return
     this.removeShip(e.target.getAttribute('data-name'))
     const obj = { ...this.oldShip, kx: (this.oldShip.kx == 0) ? 1 : 0, ky: (this.oldShip.ky == 0) ? 1 : 0 }

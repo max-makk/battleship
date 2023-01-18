@@ -25,7 +25,7 @@ bot.cleanBoard()
 bot.randomLocationShips()
 
 randomBtn.addEventListener('click', () => {
-  Gameboard.started = false
+  Gameboard.isGameStarted = false
   DOM.createGrid(botGrid)
   DOM.createGrid(playerGrid)
   player.cleanBoard()
@@ -37,11 +37,11 @@ randomBtn.addEventListener('click', () => {
 const controller = new Controller(player, bot)
 
 startBtn.addEventListener('click', () => {
-  if(Gameboard.started === true) {
+  if(Gameboard.isGameStarted === true) {
     randomBtn.classList.add('highlight')
     setTimeout(() => randomBtn.classList.remove('highlight'), 500)
     return
   }
-  Gameboard.started = true
+  Gameboard.isGameStarted = true
   controller.start()
 })

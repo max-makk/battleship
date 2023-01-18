@@ -44,12 +44,11 @@ export default class Controller {
     this.randomCoords = Controller.shuffle(Controller.coords())
     this.coordsAroundHit = []
 
-    this.opponent.field.parentElement.classList.add('highlight')
     if (this.opponent === this.player) {
-      this.notify('bot first')
+      this.opponent.field.parentElement.classList.add('highlight')
       setTimeout(() => this.makeShot(), 500)
     } else {
-      this.notify('you first')
+      this.opponent.field.parentElement.classList.add('highlight')
     }
   }
 
@@ -60,7 +59,6 @@ export default class Controller {
   }
 
   makeShot(e) {
-    this.opponent.field.parentElement.classList.remove('highlight')
     let x, y
     if (e !== undefined) {
       if (!e.target.getAttribute('data-xy')) return
@@ -73,19 +71,21 @@ export default class Controller {
     const c = this.opponent.matrix[x][y]
 
     if (c === 0) {
+      this.opponent.field.parentElement.classList.remove('highlight')
       this.miss(x, y)
+      this.opponent.field.parentElement.classList.add('highlight')
     } else if (c === 1) {
+      this.opponent.field.parentElement.classList.remove('highlight')
       this.hit(x, y)
+      this.opponent.field.parentElement.classList.add('highlight')
     }
 
-    this.opponent.field.parentElement.classList.add('highlight')
   }
 
   miss(x, y) {
     this.opponent.matrix[x][y] = 3
     this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('o')
     if (this.opponent === this.bot) {
-      this.notify('you miss')
       this.opponent = this.player
       this.toggleLoader()
       setTimeout(() => {
@@ -93,13 +93,11 @@ export default class Controller {
         this.toggleLoader()
       }, 500)
     } else {
-      this.notify('bot miss')
       this.opponent = this.bot
     }
   }
 
   hit(x, y) {
-    this.notify('hit')
     this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('x')
     this.opponent.matrix[x][y] = 4
 
@@ -120,15 +118,17 @@ export default class Controller {
 
     if (Object.keys(this.opponent.squadron).length === 0) {
       if (this.opponent === this.player) {
-        this.notify('you looose')
+        this.notify('Game over. You lose.')
+        //rematch
         for (let name in this.bot.squadron) {
           const ship = this.bot.squadron[name]
           Ship.drawShip(this.bot.field, ship.arrDecks)
         }
       } else {
-        this.notify('you wooon')
+        this.notify('Game over. Congratulations, you won!')
+        //play again
       }
-    this.bot.field.removeEventListener('click', this.makeShot.bind(this))
+      this.bot.field.removeEventListener('click', this.makeShot.bind(this))
     } else if (this.opponent === this.player) {
       this.toggleLoader()
       this.currentShip.hits++
@@ -239,7 +239,7 @@ export default class Controller {
 
   toggleLoader() {
     document.querySelector('.overlay').classList.toggle('hide')
-    document.querySelector('.loader').classList.toggle('hide')
+    // document.querySelector('.loader').classList.toggle('hide')
   }
 
 }
