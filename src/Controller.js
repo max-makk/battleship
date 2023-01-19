@@ -1,4 +1,5 @@
 import Ship from "./Ship"
+import Gameboard from './Gameboard'
 
 export default class Controller {
 
@@ -58,6 +59,7 @@ export default class Controller {
   }
 
   makeShot(e) {
+    if(!Gameboard.isGameStarted) return
     let x, y
     if (e !== undefined) {
       if (!e.target.getAttribute('data-xy')) return
@@ -125,7 +127,7 @@ export default class Controller {
         //play again
       }
       this.opponent.field.parentElement.classList.remove('highlight')
-      this.bot.field.removeEventListener('click', this.makeShot.bind(this))
+      // this.bot.field.removeEventListener('click', this.makeShot.bind(this))
     } else if (this.opponent === this.player) {
       this.toggleLoader()
       this.currentShip.hits++
