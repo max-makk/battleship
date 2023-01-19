@@ -111,12 +111,12 @@ footer {
   display: block;
 }
 
-.x {
+.hit {
   position: relative;
 }
 
-.x::before,
-.x::after {
+.hit::before,
+.hit::after {
   top: 0;
   transform: translate(-50%, -50%);
   position: absolute;
@@ -127,19 +127,19 @@ footer {
   z-index: 10;
 }
 
-.x::before {
+.hit::before {
   transform: rotate(45deg);
 }
 
-.x::after {
+.hit::after {
   transform: rotate(-45deg);
 }
 
-.o {
+.miss {
   z-index: 1;
 }
 
-.o::after {
+.miss::after {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -163,7 +163,6 @@ footer {
 }
 
 .highlight {
-  /* outline: 4px solid var(--blue); */
   box-shadow: 0px 0px 4px 4px var(--blue);
 }
 

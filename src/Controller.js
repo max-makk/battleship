@@ -79,7 +79,7 @@ export default class Controller {
   miss(x, y) {
     this.opponent.field.parentElement.classList.remove('highlight')
     this.opponent.matrix[x][y] = 3
-    this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('o')
+    this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('miss')
     if (this.opponent === this.bot) {
       this.opponent = this.player
       this.toggleLoader()
@@ -94,7 +94,7 @@ export default class Controller {
   }
 
   hit(x, y) {
-    this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('x')
+    this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('hit')
     this.opponent.matrix[x][y] = 4
 
     iter: for (let name in this.opponent.squadron) {
@@ -222,7 +222,7 @@ export default class Controller {
       if (this.opponent === this.player) {
         this.removeCoordsFromArrays(coord)
       }
-      this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('o')
+      this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('miss')
     }
   }
 
