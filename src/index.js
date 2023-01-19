@@ -32,16 +32,19 @@ randomBtn.addEventListener('click', () => {
   player.randomLocationShips()
   bot.cleanBoard()
   bot.randomLocationShips()
+  if (document.querySelector('.highlight')) {
+    document.querySelector('.highlight').classList.remove('highlight')
+  }
 })
 
 const controller = new Controller(player, bot)
 
 startBtn.addEventListener('click', () => {
-  if(Gameboard.isGameStarted === true) {
+  if (Gameboard.isGameStarted === true) {
     randomBtn.classList.add('highlight')
     setTimeout(() => randomBtn.classList.remove('highlight'), 500)
     return
   }
   Gameboard.isGameStarted = true
-  controller.start()
+  controller.init()
 })

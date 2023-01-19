@@ -36,7 +36,7 @@ export default class Controller {
     this.resetCurrentShip()
   }
 
-  start() {
+  init() {
     this.opponent = Math.random() > 0.5 ? this.player : this.bot
 
     this.bot.field.addEventListener('click', this.makeShot.bind(this))
@@ -45,11 +45,10 @@ export default class Controller {
     this.coordsAroundHit = []
 
     if (this.opponent === this.player) {
-      this.opponent.field.parentElement.classList.add('highlight')
       setTimeout(() => this.makeShot(), 500)
-    } else {
-      this.opponent.field.parentElement.classList.add('highlight')
     }
+
+    this.opponent.field.parentElement.classList.add('highlight')
   }
 
   getCoordsForShot() {
@@ -71,18 +70,14 @@ export default class Controller {
     const c = this.opponent.matrix[x][y]
 
     if (c === 0) {
-      this.opponent.field.parentElement.classList.remove('highlight')
       this.miss(x, y)
-      this.opponent.field.parentElement.classList.add('highlight')
     } else if (c === 1) {
-      this.opponent.field.parentElement.classList.remove('highlight')
       this.hit(x, y)
-      this.opponent.field.parentElement.classList.add('highlight')
     }
-
   }
 
   miss(x, y) {
+    this.opponent.field.parentElement.classList.remove('highlight')
     this.opponent.matrix[x][y] = 3
     this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('o')
     if (this.opponent === this.bot) {
@@ -95,6 +90,7 @@ export default class Controller {
     } else {
       this.opponent = this.bot
     }
+    this.opponent.field.parentElement.classList.add('highlight')
   }
 
   hit(x, y) {
@@ -128,6 +124,7 @@ export default class Controller {
         this.notify('Game over. Congratulations, you won!')
         //play again
       }
+      this.opponent.field.parentElement.classList.remove('highlight')
       this.bot.field.removeEventListener('click', this.makeShot.bind(this))
     } else if (this.opponent === this.player) {
       this.toggleLoader()
