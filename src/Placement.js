@@ -41,6 +41,7 @@ export default class Placement {
     } else {
       this.restoreShip()
     }
+    this.board.saveShips()
   }
 
   rotateShip(e) {
@@ -58,6 +59,7 @@ export default class Placement {
       ship.createShip()
       Ship.drawShip(ship.board.field, ship.arrDecks, ship.shipname)
     }
+    this.board.saveShips()
   }
 
   removeShip(el) {

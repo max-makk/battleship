@@ -1,4 +1,5 @@
 import Ship from './Ship'
+import Storage from './Storage'
 
 export default class Gameboard {
 
@@ -29,11 +30,11 @@ export default class Gameboard {
   }
 
   randomLocationShips() {
-    for(let type in Gameboard.SHIP_INFO) {
+    for (let type in Gameboard.SHIP_INFO) {
       let count = Gameboard.SHIP_INFO[type][0]
       let decks = Gameboard.SHIP_INFO[type][1]
 
-      for(let i = 0; i < count; i++) {
+      for (let i = 0; i < count; i++) {
         let options = this.getCoordsDecks(decks)
         options.decks = decks
         options.shipname = type + String(i + 1)
@@ -46,10 +47,24 @@ export default class Gameboard {
     }
   }
 
-  getCoordsDecks(decks) {
-    let kx = Gameboard.getRandom(1), ky = (kx == 0) ? 1 : 0, x , y
+  saveShips() {
+    Storage.store(Object.assign({}, this.squadron))
+  }
 
-    if(kx == 0) {
+  placeShips() {
+    const ships = Storage.check()
+    for (let name of Object.keys(ships)) {
+      const data = ships[name]
+      const ship = new Ship(this, { ...data, decks: data.arrDecks.length, shipname: name })
+      ship.createShip()
+      Ship.drawShip(this.field, ship.arrDecks, ship.shipname)
+    }
+  }
+
+  getCoordsDecks(decks) {
+    let kx = Gameboard.getRandom(1), ky = (kx == 0) ? 1 : 0, x, y
+
+    if (kx == 0) {
       x = Gameboard.getRandom(9)
       y = Gameboard.getRandom(10 - decks)
     } else {
@@ -57,10 +72,10 @@ export default class Gameboard {
       y = Gameboard.getRandom(9)
     }
 
-    const obj = {x, y, kx, ky}
+    const obj = { x, y, kx, ky }
     const result = this.checkLocationShip(obj, decks)
 
-    if(!result) return this.getCoordsDecks(decks)
+    if (!result) return this.getCoordsDecks(decks)
     return obj
   }
 
@@ -81,8 +96,8 @@ export default class Gameboard {
     if (toX === undefined || toY === undefined) return false;
 
     if (this.matrix.slice(fromX, toX)
-            .filter(arr => arr.slice(fromY, toY).includes(1))
-            .length > 0) return false
+      .filter(arr => arr.slice(fromY, toY).includes(1))
+      .length > 0) return false
     return true
   }
 }

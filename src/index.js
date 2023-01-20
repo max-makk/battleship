@@ -2,10 +2,12 @@ import './style.css'
 import Gameboard from './Gameboard'
 import Placement from './Placement'
 import Controller from './Controller'
+import Storage from './Storage'
 import DOM from './DOM'
 
 const startBtn = document.querySelector('.start')
 const randomBtn = document.querySelector('.random')
+const rematch = document.querySelector('.rematch')
 
 const playerGrid = document.querySelector('.player')
 const botGrid = document.querySelector('.bot')
@@ -19,7 +21,12 @@ const bot = new Gameboard(botGrid)
 new Placement(player)
 
 player.cleanBoard()
-player.randomLocationShips()
+if (Storage.check()) {
+  player.placeShips()
+} else {
+  player.randomLocationShips()
+  player.saveShips()
+}
 
 bot.cleanBoard()
 bot.randomLocationShips()
@@ -30,6 +37,7 @@ randomBtn.addEventListener('click', () => {
   DOM.createGrid(playerGrid)
   player.cleanBoard()
   player.randomLocationShips()
+  player.saveShips()
   bot.cleanBoard()
   bot.randomLocationShips()
   if (document.querySelector('.highlight')) {
@@ -47,4 +55,17 @@ startBtn.addEventListener('click', () => {
   }
   Gameboard.isGameStarted = true
   controller.init()
+})
+
+rematch.addEventListener('click', () => {
+  Gameboard.isGameStarted = false
+  DOM.createGrid(botGrid)
+  DOM.createGrid(playerGrid)
+  player.cleanBoard()
+  player.placeShips()
+  bot.cleanBoard()
+  bot.randomLocationShips()
+  if (document.querySelector('.highlight')) {
+    document.querySelector('.highlight').classList.remove('highlight')
+  }
 })
