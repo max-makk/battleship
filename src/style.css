@@ -24,18 +24,21 @@
   margin: 0;
 }
 
-html {
-  height: 100%
+html, body {
+  height: 100%;
 }
 
 body {
   font-family: "Fira Sans", sans-serif;
   background: var(--dark);
   color: var(--gray);
-  height: 100vh;
   text-align: center;
   display: flex;
   flex-direction: column;
+}
+
+h1 {
+  padding: 0.2em;
 }
 
 header {
@@ -76,11 +79,8 @@ footer {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  flex-wrap: wrap;
-}
-
-.board {
-  margin: 0 1em;
+  flex-wrap: wrap-reverse;
+  gap: 1em;
 }
 
 .board h2 {
@@ -112,7 +112,7 @@ footer {
 .player > div::before,
 .bot > div::before {
   content: "";
-  /*padding-bottom: 100%;*/
+  /* padding-bottom: 100%; */
   display: block;
 }
 
