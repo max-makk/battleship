@@ -33,22 +33,34 @@ if (Storage.check()) {
 bot.cleanBoard()
 bot.randomPlaceShips()
 
-random.addEventListener('click', () => {
+const controller = new Controller(player, bot)
+
+const resetGame = (isRandom) => {
   Gameboard.isGameStarted = false
   rematch.disabled = true
   play.disabled = false
   DOM.clearField()
   player.cleanBoard()
-  player.randomPlaceShips()
-  player.saveShips()
+  if (isRandom) {
+    player.randomPlaceShips()
+    player.saveShips()
+  } else {
+    player.placeShips()
+  }
   bot.cleanBoard()
   bot.randomPlaceShips()
   if (document.querySelector('.highlight')) {
     document.querySelector('.highlight').classList.remove('highlight')
   }
+}
+
+random.addEventListener('click', () => {
+  resetGame(true)
 })
 
-const controller = new Controller(player, bot)
+rematch.addEventListener('click', () => {
+  resetGame(false)
+})
 
 play.addEventListener('click', () => {
   if (Gameboard.isGameStarted === true) {
@@ -60,16 +72,3 @@ play.addEventListener('click', () => {
   controller.init()
 })
 
-rematch.addEventListener('click', () => {
-  Gameboard.isGameStarted = false
-  rematch.disabled = true
-  play.disabled = false
-  DOM.clearField()
-  player.cleanBoard()
-  player.placeShips()
-  bot.cleanBoard()
-  bot.randomPlaceShips()
-  if (document.querySelector('.highlight')) {
-    document.querySelector('.highlight').classList.remove('highlight')
-  }
-})
