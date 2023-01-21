@@ -1,5 +1,6 @@
 import Ship from "./Ship"
 import Gameboard from './Gameboard'
+import DOM from "./DOM"
 
 export default class Controller {
 
@@ -46,7 +47,11 @@ export default class Controller {
     this.coordsAroundHit = []
 
     if (this.opponent === this.player) {
-      setTimeout(() => this.attack(), 500)
+      DOM.toggleOverlay()
+      setTimeout(() => {
+        this.attack()
+        DOM.toggleOverlay()
+      }, 500)
     }
 
     this.opponent.field.parentElement.classList.add('highlight')
@@ -84,10 +89,10 @@ export default class Controller {
     this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('miss')
     if (this.opponent === this.bot) {
       this.opponent = this.player
-      this.toggleLoader()
+      DOM.toggleOverlay()
       setTimeout(() => {
         this.attack()
-        this.toggleLoader()
+        DOM.toggleOverlay()
       }, 500)
     } else {
       this.opponent = this.bot
@@ -103,19 +108,19 @@ export default class Controller {
 
     if (Object.keys(this.opponent.ships).length === 0) {
       if (this.opponent === this.player) {
-        this.notify('Game over. You lose.')
+        DOM.notify('Game over. You lose.')
         //rematch
         for (let name in this.bot.ships) {
           const ship = this.bot.ships[name]
           Ship.drawShip(this.bot.field, ship.arrDecks)
         }
       } else {
-        this.notify('Game over. Congratulations, you won!')
+        DOM.notify('Game over. Congratulations, you won!')
         //play again
       }
       this.opponent.field.parentElement.classList.remove('highlight')
     } else if (this.opponent === this.player) {
-      this.toggleLoader()
+      DOM.toggleOverlay()
       this.currentShip.hits++
       let coords = [
         [x - 1, y],
@@ -128,7 +133,7 @@ export default class Controller {
 
       setTimeout(() => {
         this.attack()
-        this.toggleLoader()
+        DOM.toggleOverlay()
       }, 500)
     }
 
@@ -229,19 +234,6 @@ export default class Controller {
       }
       this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('miss')
     }
-  }
-
-  notify(str = 'test ...') {
-    const div = document.createElement('div')
-    div.classList.add('notify')
-    div.textContent = str
-    document.body.append(div)
-    setTimeout(() => div.remove(), 2000)
-  }
-
-  toggleLoader() {
-    document.querySelector('.overlay').classList.toggle('hide')
-    // document.querySelector('.loader').classList.toggle('hide')
   }
 
 }

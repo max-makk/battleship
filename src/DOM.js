@@ -1,5 +1,6 @@
 
 export default class DOM {
+
   static createGrid(grid) {
     grid.textContent = ''
     for (let i = 0; i < 100; i++) {
@@ -9,4 +10,23 @@ export default class DOM {
       grid.append(div)
     }
   }
+
+  static toggleOverlay() {
+    if (document.querySelector('.overlay')) {
+      document.querySelector('.overlay').remove()
+    } else {
+      const div = document.createElement('div')
+      div.classList.add('overlay')
+      document.body.append(div)
+    }
+  }
+
+  static notify(str = '...') {
+    const div = document.createElement('div')
+    div.classList.add('notify')
+    div.textContent = str
+    document.body.append(div)
+    setTimeout(() => div.remove(), 2000)
+  }
+
 }
