@@ -29,4 +29,10 @@ export default class DOM {
     setTimeout(() => div.remove(), 2000)
   }
 
+  static clearField() {
+    document.querySelectorAll('.ship').forEach(el => el.remove())
+    document.querySelectorAll('.hit').forEach(el => el.classList.remove('hit'))
+    document.querySelectorAll('.miss').forEach(el => el.classList.remove('miss'))
+  }
+
 }

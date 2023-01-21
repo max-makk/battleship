@@ -35,8 +35,7 @@ random.addEventListener('click', () => {
   Gameboard.isGameStarted = false
   rematch.disabled = true
   play.disabled = false
-  DOM.createGrid(botGrid)
-  DOM.createGrid(playerGrid)
+  DOM.clearField()
   player.cleanBoard()
   player.randomPlaceShips()
   player.saveShips()
@@ -63,8 +62,7 @@ rematch.addEventListener('click', () => {
   Gameboard.isGameStarted = false
   rematch.disabled = true
   play.disabled = false
-  DOM.createGrid(botGrid)
-  DOM.createGrid(playerGrid)
+  DOM.clearField()
   player.cleanBoard()
   player.placeShips()
   bot.cleanBoard()
