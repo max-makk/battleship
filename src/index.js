@@ -5,18 +5,20 @@ import Controller from './Controller'
 import Storage from './Storage'
 import DOM from './DOM'
 
+DOM.init()
+
 const play = document.querySelector('.play')
 const random = document.querySelector('.random')
 const rematch = document.querySelector('.rematch')
 
-const playerGrid = document.querySelector('.player')
-const botGrid = document.querySelector('.bot')
+const playerField = document.querySelector('.player')
+const botField = document.querySelector('.bot')
 
-DOM.createGrid(playerGrid)
-DOM.createGrid(botGrid)
+DOM.createCells(playerField)
+DOM.createCells(botField)
 
-const player = new Gameboard(playerGrid)
-const bot = new Gameboard(botGrid)
+const player = new Gameboard(playerField)
+const bot = new Gameboard(botField)
 
 new Placement(player)
 
