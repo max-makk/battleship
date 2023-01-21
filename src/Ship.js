@@ -34,7 +34,7 @@ export default class Ship {
       k++
     }
 
-    board.squadron[shipname] = { arrDecks, hits, x, y, kx, ky }
+    board.ships[shipname] = { arrDecks, hits, x, y, kx, ky }
   }
 
 }

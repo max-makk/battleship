@@ -63,7 +63,7 @@ export default class Placement {
   }
 
   removeShip(el) {
-    const obj = this.board.squadron[el]
+    const obj = this.board.ships[el]
     this.oldShip = {
       y: obj.y,
       x: obj.x,
@@ -77,7 +77,7 @@ export default class Placement {
       const [x, y] = i
       this.board.matrix[x][y] = 0
     }
-    delete this.board.squadron[el]
+    delete this.board.ships[el]
   }
 
   restoreShip() {

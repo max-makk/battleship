@@ -40,13 +40,13 @@ export default class Controller {
   init() {
     this.opponent = Math.random() > 0.5 ? this.player : this.bot
 
-    this.bot.field.addEventListener('click', this.makeShot.bind(this))
+    this.bot.field.addEventListener('click', this.attack.bind(this))
 
     this.randomCoords = Controller.shuffle(Controller.coords())
     this.coordsAroundHit = []
 
     if (this.opponent === this.player) {
-      setTimeout(() => this.makeShot(), 500)
+      setTimeout(() => this.attack(), 500)
     }
 
     this.opponent.field.parentElement.classList.add('highlight')
@@ -58,8 +58,8 @@ export default class Controller {
     return c
   }
 
-  makeShot(e) {
-    if(!Gameboard.isGameStarted) return
+  attack(e) {
+    if (!Gameboard.isGameStarted) return
     let x, y
     if (e !== undefined) {
       if (!e.target.getAttribute('data-xy')) return
@@ -86,7 +86,7 @@ export default class Controller {
       this.opponent = this.player
       this.toggleLoader()
       setTimeout(() => {
-        this.makeShot()
+        this.attack()
         this.toggleLoader()
       }, 500)
     } else {
@@ -99,27 +99,14 @@ export default class Controller {
     this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('hit')
     this.opponent.matrix[x][y] = 4
 
-    iter: for (let name in this.opponent.squadron) {
-      const ship = this.opponent.squadron[name]
-      for (let c of ship.arrDecks) {
-        if (c[0] !== x || c[1] !== y) continue
-        ship.hits++
-        if (ship.hits < ship.arrDecks.length) break iter
-        if (this.opponent === this.player) {
-          this.resetCurrentShip()
-        }
-        this.markEmptyCellsAroundShip(ship)
-        delete this.opponent.squadron[name]
-        break iter
-      }
-    }
+    this.isSunk(x, y)
 
-    if (Object.keys(this.opponent.squadron).length === 0) {
+    if (Object.keys(this.opponent.ships).length === 0) {
       if (this.opponent === this.player) {
         this.notify('Game over. You lose.')
         //rematch
-        for (let name in this.bot.squadron) {
-          const ship = this.bot.squadron[name]
+        for (let name in this.bot.ships) {
+          const ship = this.bot.ships[name]
           Ship.drawShip(this.bot.field, ship.arrDecks)
         }
       } else {
@@ -127,7 +114,6 @@ export default class Controller {
         //play again
       }
       this.opponent.field.parentElement.classList.remove('highlight')
-      // this.bot.field.removeEventListener('click', this.makeShot.bind(this))
     } else if (this.opponent === this.player) {
       this.toggleLoader()
       this.currentShip.hits++
@@ -141,7 +127,7 @@ export default class Controller {
       this.setCoordsAroundHit(x, y, coords)
 
       setTimeout(() => {
-        this.makeShot()
+        this.attack()
         this.toggleLoader()
       }, 500)
     }
@@ -158,6 +144,23 @@ export default class Controller {
       [x + 1, y + 1]
     ]
     this.markEmptyCell(coords)
+  }
+
+  isSunk(x, y) {
+    iter: for (let name in this.opponent.ships) {
+      const ship = this.opponent.ships[name]
+      for (let c of ship.arrDecks) {
+        if (c[0] !== x || c[1] !== y) continue
+        ship.hits++
+        if (ship.hits < ship.arrDecks.length) break iter
+        if (this.opponent === this.player) {
+          this.resetCurrentShip()
+        }
+        this.markEmptyCellsAroundShip(ship)
+        delete this.opponent.ships[name]
+        break iter
+      }
+    }
   }
 
   removeCoordsFromArrays(coords) {

@@ -24,22 +24,22 @@ player.cleanBoard()
 if (Storage.check()) {
   player.placeShips()
 } else {
-  player.randomLocationShips()
+  player.randomPlaceShips()
   player.saveShips()
 }
 
 bot.cleanBoard()
-bot.randomLocationShips()
+bot.randomPlaceShips()
 
 randomBtn.addEventListener('click', () => {
   Gameboard.isGameStarted = false
   DOM.createGrid(botGrid)
   DOM.createGrid(playerGrid)
   player.cleanBoard()
-  player.randomLocationShips()
+  player.randomPlaceShips()
   player.saveShips()
   bot.cleanBoard()
-  bot.randomLocationShips()
+  bot.randomPlaceShips()
   if (document.querySelector('.highlight')) {
     document.querySelector('.highlight').classList.remove('highlight')
   }
@@ -64,7 +64,7 @@ rematch.addEventListener('click', () => {
   player.cleanBoard()
   player.placeShips()
   bot.cleanBoard()
-  bot.randomLocationShips()
+  bot.randomPlaceShips()
   if (document.querySelector('.highlight')) {
     document.querySelector('.highlight').classList.remove('highlight')
   }

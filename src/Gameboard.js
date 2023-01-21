@@ -20,16 +20,16 @@ export default class Gameboard {
 
   constructor(field) {
     this.field = field
-    this.squadron = {}
+    this.ships = {}
     this.matrix = []
   }
 
   cleanBoard() {
-    this.squadron = {}
+    this.ships = {}
     this.matrix = Gameboard.createMatrix()
   }
 
-  randomLocationShips() {
+  randomPlaceShips() {
     for (let type in Gameboard.SHIP_INFO) {
       let count = Gameboard.SHIP_INFO[type][0]
       let decks = Gameboard.SHIP_INFO[type][1]
@@ -48,13 +48,13 @@ export default class Gameboard {
   }
 
   saveShips() {
-    Storage.store(Object.assign({}, this.squadron))
+    Storage.store(Object.assign({}, this.ships))
   }
 
   placeShips() {
-    const ships = Storage.check()
-    for (let name of Object.keys(ships)) {
-      const data = ships[name]
+    const savedShips = Storage.check()
+    for (let name of Object.keys(savedShips)) {
+      const data = savedShips[name]
       const ship = new Ship(this, { ...data, decks: data.arrDecks.length, shipname: name })
       ship.createShip()
       Ship.drawShip(this.field, ship.arrDecks, ship.shipname)
