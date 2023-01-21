@@ -5,8 +5,8 @@ import Controller from './Controller'
 import Storage from './Storage'
 import DOM from './DOM'
 
-const startBtn = document.querySelector('.start')
-const randomBtn = document.querySelector('.random')
+const play = document.querySelector('.play')
+const random = document.querySelector('.random')
 const rematch = document.querySelector('.rematch')
 
 const playerGrid = document.querySelector('.player')
@@ -31,8 +31,10 @@ if (Storage.check()) {
 bot.cleanBoard()
 bot.randomPlaceShips()
 
-randomBtn.addEventListener('click', () => {
+random.addEventListener('click', () => {
   Gameboard.isGameStarted = false
+  rematch.disabled = true
+  play.disabled = false
   DOM.createGrid(botGrid)
   DOM.createGrid(playerGrid)
   player.cleanBoard()
@@ -47,18 +49,20 @@ randomBtn.addEventListener('click', () => {
 
 const controller = new Controller(player, bot)
 
-startBtn.addEventListener('click', () => {
+play.addEventListener('click', () => {
   if (Gameboard.isGameStarted === true) {
-    randomBtn.classList.add('highlight')
-    setTimeout(() => randomBtn.classList.remove('highlight'), 500)
     return
   }
   Gameboard.isGameStarted = true
+  rematch.disabled = false
+  play.disabled = true
   controller.init()
 })
 
 rematch.addEventListener('click', () => {
   Gameboard.isGameStarted = false
+  rematch.disabled = true
+  play.disabled = false
   DOM.createGrid(botGrid)
   DOM.createGrid(playerGrid)
   player.cleanBoard()

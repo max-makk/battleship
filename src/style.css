@@ -74,6 +74,13 @@ footer {
   cursor: pointer;
 }
 
+.play:disabled,
+.random:disabled,
+.rematch:disabled {
+  opacity: 0.5;
+  cursor: initial;
+}
+
 .boards {
   margin-top: 3em;
   display: flex;
