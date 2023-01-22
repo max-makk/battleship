@@ -73,7 +73,7 @@ export default class DOM {
     boards.append(botBoard)
     main.append(boards)
     const footer = DOM.createDOM('footer',
-      'Double-click to switch a ship direction. Drag and Drop the ships.',
+      'Click on a ship to switch direction. Drag and Drop the ships.',
       []
     )
     document.body.append(header)

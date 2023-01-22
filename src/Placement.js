@@ -9,7 +9,7 @@ export default class Placement {
     this.oldShip = {}
     document.addEventListener('dragstart', this.dragStart.bind(this))
     document.addEventListener('mouseup', this.dragEnd.bind(this))
-    document.addEventListener('dblclick', this.rotateShip.bind(this))
+    document.addEventListener('click', this.rotateShip.bind(this))
   }
 
   dragStart(e) {
