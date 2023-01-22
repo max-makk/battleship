@@ -35,13 +35,14 @@ export default class Controller {
     this.opponent = {}
     this.randomCoords = []
     this.coordsAroundHit = []
+    this.clickHandler = this.attack.bind(this)
     this.resetCurrentShip()
   }
 
   init() {
     this.opponent = Math.random() > 0.5 ? this.player : this.bot
 
-    this.bot.field.addEventListener('click', this.attack.bind(this))
+    this.bot.field.addEventListener('click', this.clickHandler)
 
     this.randomCoords = Controller.shuffle(Controller.coords())
     this.coordsAroundHit = []
@@ -64,11 +65,10 @@ export default class Controller {
   }
 
   attack(e) {
-    if (!Gameboard.isGameStarted) return
     let x, y
     if (e !== undefined) {
-      if (!e.target.getAttribute('data-xy')) return
       if (this.opponent === this.player) return
+      if (!e.target.getAttribute('data-xy')) return
       [x, y] = e.target.getAttribute('data-xy').split('').map(i => Number(i))
     } else {
       [x, y] = this.getCoordsForShot()
@@ -107,16 +107,15 @@ export default class Controller {
     this.isSunk(x, y)
 
     if (Object.keys(this.opponent.ships).length === 0) {
+    this.bot.field.removeEventListener('click', this.clickHandler)
       if (this.opponent === this.player) {
         DOM.notify('Game over. You lose.')
-        //rematch
         for (let name in this.bot.ships) {
           const ship = this.bot.ships[name]
           Ship.drawShip(this.bot.field, ship.arrDecks)
         }
       } else {
         DOM.notify('Game over. Congratulations, you won!')
-        //play again
       }
       this.opponent.field.parentElement.classList.remove('highlight')
     } else if (this.opponent === this.player) {
