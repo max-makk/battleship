@@ -13,7 +13,7 @@ export default class Storage {
 }
 
 const data = {
-  singledeck2: { arrDecks: [[4, 6]], hits: 0, x: 4, y: 6, kx: 1, ky: 0 },
+  singledeck2: { arrDecks: [[4, 6]], hits: 0, x: 5, y: 6, kx: 1, ky: 0 },
   singledeck3: { arrDecks: [[3, 8]], hits: 0, x: 3, y: 8, kx: 1, ky: 0 },
   tripledeck2: { arrDecks: [[7, 0], [8, 0], [9, 0]], hits: 0, x: 7, y: 0, kx: 1, ky: 0 },
   singledeck1: { arrDecks: [[1, 8]], hits: 0, x: 1, y: 8, kx: 0, ky: 1 }, 
