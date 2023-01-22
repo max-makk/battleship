@@ -1,5 +1,4 @@
 import Ship from "./Ship"
-import Gameboard from './Gameboard'
 import DOM from "./DOM"
 
 export default class Controller {
@@ -107,7 +106,7 @@ export default class Controller {
     this.isSunk(x, y)
 
     if (Object.keys(this.opponent.ships).length === 0) {
-    this.bot.field.removeEventListener('click', this.clickHandler)
+      this.stopListening()
       if (this.opponent === this.player) {
         DOM.notify('Game over. You lose.')
         for (let name in this.bot.ships) {
@@ -233,6 +232,10 @@ export default class Controller {
       }
       this.opponent.field.querySelector(`[data-xy='${'' + x + y}']`).classList.add('miss')
     }
+  }
+
+  stopListening() {
+    this.bot.field.removeEventListener('click', this.clickHandler)
   }
 
 }

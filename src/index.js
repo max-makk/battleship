@@ -39,6 +39,7 @@ const resetGame = (isRandom) => {
   Gameboard.isGameStarted = false
   rematch.disabled = true
   play.disabled = false
+  controller.stopListening()
   DOM.clearField()
   player.cleanBoard()
   if (isRandom) {
