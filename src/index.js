@@ -26,8 +26,8 @@ player.cleanBoard()
 if (Storage.check()) {
   player.placeShips()
 } else {
-  player.randomPlaceShips()
-  player.saveShips()
+  Storage.storeDefaultShips()
+  player.placeShips()
 }
 
 bot.cleanBoard()
