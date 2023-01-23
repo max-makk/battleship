@@ -81,4 +81,10 @@ export default class DOM {
     document.body.append(footer)
   }
 
+  static removeHighlight() {
+    if (document.querySelector('.highlight')) {
+      document.querySelector('.highlight').classList.remove('highlight')
+    }
+  }
+
 }

@@ -50,9 +50,7 @@ const resetGame = (isRandom) => {
   }
   bot.cleanBoard()
   bot.randomPlaceShips()
-  if (document.querySelector('.highlight')) {
-    document.querySelector('.highlight').classList.remove('highlight')
-  }
+  DOM.removeHighlight()
 }
 
 random.addEventListener('click', () => {
