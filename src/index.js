@@ -11,8 +11,8 @@ const play = document.querySelector('.play')
 const random = document.querySelector('.random')
 const rematch = document.querySelector('.rematch')
 
-const playerField = document.querySelector('.player')
-const botField = document.querySelector('.bot')
+const playerField = document.querySelector('.battlefield-self')
+const botField = document.querySelector('.battlefield-rival')
 
 DOM.createCells(playerField)
 DOM.createCells(botField)

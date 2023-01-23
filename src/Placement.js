@@ -25,7 +25,7 @@ export default class Placement {
     if (!this.isDragged) return
     this.isDragged = false
     const str = e.target.getAttribute('data-xy')
-    if (!str || !e.target.closest('.player')) {
+    if (!str || !e.target.closest('.battlefield-self')) {
       this.restoreShip()
       return
     }

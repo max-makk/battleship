@@ -40,7 +40,7 @@ export default class Gameboard {
         options.shipname = type + String(i + 1)
         const ship = new Ship(this, options)
         ship.createShip()
-        if (this.field.classList[0] === 'player') {
+        if (this.field.classList[0] === 'battlefield-self') {
           Ship.drawShip(this.field, ship.arrDecks, ship.shipname)
         }
       }
