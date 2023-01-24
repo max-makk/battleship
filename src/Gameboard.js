@@ -80,24 +80,19 @@ export default class Gameboard {
   }
 
   checkLocationShip(obj, decks) {
-    let { x, y, kx, ky, fromX, toX, fromY, toY } = obj;
-
-    fromX = (x == 0) ? x : x - 1;
-    if (x + kx * decks == 10 && kx == 1) toX = x + kx * decks;
-    else if (x + kx * decks < 10 && kx == 1) toX = x + kx * decks + 1;
-    else if (x == 9 && kx == 0) toX = x + 1;
-    else if (x < 9 && kx == 0) toX = x + 2;
-    fromY = (y == 0) ? y : y - 1;
-    if (y + ky * decks == 10 && ky == 1) toY = y + ky * decks;
-    else if (y + ky * decks < 10 && ky == 1) toY = y + ky * decks + 1;
-    else if (y == 9 && ky == 0) toY = y + 1;
-    else if (y < 9 && ky == 0) toY = y + 2;
-
-    if (toX === undefined || toY === undefined) return false;
-
-    if (this.matrix.slice(fromX, toX)
-      .filter(arr => arr.slice(fromY, toY).includes(1))
-      .length > 0) return false
+    let { x, y, kx, ky } = obj;
+    for (let i = 0; i < decks; i++) {
+      const dir = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [0, 0]];
+      for (let s = 0; s < dir.length; s++) {
+        const j = (x + i * kx) + dir[s][0]
+        const k = (y + i * ky) + dir[s][1]
+        if (j >= 0 && j < 10 &&
+          k >= 0 && k < 10 &&
+          this.matrix[j][k] === 1) {
+          return false
+        }
+      }
+    }
     return true
   }
 }
