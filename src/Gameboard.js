@@ -91,17 +91,17 @@ export default class Gameboard {
       [1, -1], [1, 0], [1, 1]
     ]
     for (let i = 0; i < decks; i++) {
-      // if(i === 1) {
-      //   if(kx === 0) {
-      //     dir = [
-      //       [-1, 1], [0, 1], [1, 1]
-      //     ]
-      //   } else {
-      //     dir = [
-      //       [1, -1], [1, 0], [1, 1]
-      //     ]
-      //   }
-      // }
+      if(i === 1) {
+        if(kx === 0) {
+          dir = [
+            [-1, 1], [0, 1], [1, 1]
+          ]
+        } else {
+          dir = [
+            [1, -1], [1, 0], [1, 1]
+          ]
+        }
+      }
       for (let s = 0; s < dir.length; s++) {
         const j = (x + i * kx) + dir[s][0]
         const k = (y + i * ky) + dir[s][1]
