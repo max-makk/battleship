@@ -81,8 +81,27 @@ export default class Gameboard {
 
   checkLocationShip(obj, decks) {
     let { x, y, kx, ky } = obj;
+
+    if (kx === 0 && ((y + decks) > 10)) return false
+    else if (ky === 0 && ((x + decks) > 10)) return false
+
+    let dir = [
+      [-1, -1], [-1, 0], [-1, 1],
+      [0, -1], [0, 0], [0, 1],
+      [1, -1], [1, 0], [1, 1]
+    ]
     for (let i = 0; i < decks; i++) {
-      const dir = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [0, 0]];
+      // if(i === 1) {
+      //   if(kx === 0) {
+      //     dir = [
+      //       [-1, 1], [0, 1], [1, 1]
+      //     ]
+      //   } else {
+      //     dir = [
+      //       [1, -1], [1, 0], [1, 1]
+      //     ]
+      //   }
+      // }
       for (let s = 0; s < dir.length; s++) {
         const j = (x + i * kx) + dir[s][0]
         const k = (y + i * ky) + dir[s][1]
