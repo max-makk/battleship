@@ -40,7 +40,12 @@ export default class DOM {
     div.classList.add('notify')
     div.textContent = str
     document.body.append(div)
-    setTimeout(() => div.remove(), 2000)
+  }
+
+  static hideNotify() {
+    if (document.querySelector('.notify')) {
+      document.querySelector('.notify').remove()
+    }
   }
 
   static clearField() {
@@ -145,6 +150,7 @@ export default class DOM {
     this.btnRematch.disabled = true
     this.btnPlay.disabled = false
     this.controller.stopListening()
+    DOM.hideNotify()
     DOM.clearField()
     this.player.cleanBoard()
     if (isRandom) {
