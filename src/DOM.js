@@ -1,3 +1,8 @@
+import Gameboard from "./Gameboard"
+import Placement from "./Placement"
+import Storage from "./Storage"
+import Controller from "./Controller"
+
 export default class DOM {
 
   static createDOM(tag, text, classes) {
@@ -44,19 +49,36 @@ export default class DOM {
     document.querySelectorAll('.miss').forEach(el => el.classList.remove('miss'))
   }
 
-  static init() {
+  static removeHighlight() {
+    if (document.querySelector('.highlight')) {
+      document.querySelector('.highlight').classList.remove('highlight')
+    }
+  }
+
+  constructor() {
+    this.btnPlay = null
+    this.btnRematch = null
+    this.btnRandom = null
+
+    this.player = null
+    this.bot = null
+
+    this.controller = null
+  }
+
+  run() {
     const header = DOM.createDOM('header', false, [])
     const h1 = DOM.createDOM('h1', '....battleship....', [])
     header.append(h1)
     const main = DOM.createDOM('main', false, [])
     const buttons = DOM.createDOM('div', false, ['buttons'])
-    const btnRandom = DOM.createDOM('button', 'Randomise', ['random'])
-    const btnPlay = DOM.createDOM('button', 'Play', ['play'])
-    const btnRematch = DOM.createDOM('button', 'Rematch', ['rematch'])
-    btnRematch.disabled = true
-    buttons.append(btnRandom)
-    buttons.append(btnPlay)
-    buttons.append(btnRematch)
+    this.btnRandom = DOM.createDOM('button', 'Randomise', ['random'])
+    this.btnPlay = DOM.createDOM('button', 'Play', ['play'])
+    this.btnRematch = DOM.createDOM('button', 'Rematch', ['rematch'])
+    this.btnRematch.disabled = true
+    buttons.append(this.btnRandom)
+    buttons.append(this.btnPlay)
+    buttons.append(this.btnRematch)
     main.append(buttons)
     const battlefields = DOM.createDOM('div', false, ['battlefields'])
     const selfWrapper = DOM.createDOM('div', false, ['wrapper'])
@@ -79,12 +101,61 @@ export default class DOM {
     document.body.append(header)
     document.body.append(main)
     document.body.append(footer)
+
+    DOM.createCells(selfField)
+    DOM.createCells(rivalField)
+
+    this.initGame(selfField, rivalField)
   }
 
-  static removeHighlight() {
-    if (document.querySelector('.highlight')) {
-      document.querySelector('.highlight').classList.remove('highlight')
+  initGame(playerField, botField) {
+    this.player = new Gameboard(playerField)
+    this.bot = new Gameboard(botField)
+    new Placement(this.player)
+    this.player.cleanBoard()
+    if (Storage.check()) {
+      this.player.placeShips()
+    } else {
+      Storage.storeDefaultShips()
+      this.player.placeShips()
     }
+
+    this.bot.cleanBoard()
+    this.bot.randomPlaceShips()
+
+    this.controller = new Controller(this.player, this.bot)
+
+    this.btnRematch.addEventListener('click', this.resetGame.bind(this, false))
+    this.btnRandom.addEventListener('click', this.resetGame.bind(this, true))
+    this.btnPlay.addEventListener('click', this.startGame.bind(this))
+  }
+
+  startGame() {
+    if (Gameboard.isGameStarted === true) {
+      return
+    }
+    Gameboard.isGameStarted = true
+    this.btnRematch.disabled = false
+    this.btnPlay.disabled = true
+    this.controller.init()
+  }
+
+  resetGame(isRandom) {
+    Gameboard.isGameStarted = false
+    this.btnRematch.disabled = true
+    this.btnPlay.disabled = false
+    this.controller.stopListening()
+    DOM.clearField()
+    this.player.cleanBoard()
+    if (isRandom) {
+      this.player.randomPlaceShips()
+      this.player.saveShips()
+    } else {
+      this.player.placeShips()
+    }
+    this.bot.cleanBoard()
+    this.bot.randomPlaceShips()
+    DOM.removeHighlight()
   }
 
 }
