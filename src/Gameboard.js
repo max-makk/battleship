@@ -5,7 +5,7 @@ export default class Gameboard {
 
   static isGameStarted = false
 
-  static SHIP_INFO = {
+  static SHIP_DATA = {
     fourdeck: [1, 4],
     tripledeck: [2, 3],
     doubledeck: [3, 2],
@@ -30,12 +30,12 @@ export default class Gameboard {
   }
 
   randomPlaceShips() {
-    for (let type in Gameboard.SHIP_INFO) {
-      let count = Gameboard.SHIP_INFO[type][0]
-      let decks = Gameboard.SHIP_INFO[type][1]
+    for (let type in Gameboard.SHIP_DATA) {
+      let count = Gameboard.SHIP_DATA[type][0]
+      let decks = Gameboard.SHIP_DATA[type][1]
 
       for (let i = 0; i < count; i++) {
-        let options = this.getCoordsDecks(decks)
+        let options = this.getCoords(decks)
         options.decks = decks
         options.shipname = type + String(i + 1)
         const ship = new Ship(this, options)
@@ -61,10 +61,13 @@ export default class Gameboard {
     }
   }
 
-  getCoordsDecks(decks) {
-    let kx = Gameboard.getRandom(1), ky = (kx == 0) ? 1 : 0, x, y
+  getCoords(decks) {
+    let h = Gameboard.getRandom(1)
+    let v = (h === 0) ? 1 : 0
+    let x = undefined
+    let y = undefined
 
-    if (kx == 0) {
+    if (h === 0) {
       x = Gameboard.getRandom(9)
       y = Gameboard.getRandom(10 - decks)
     } else {
@@ -72,18 +75,18 @@ export default class Gameboard {
       y = Gameboard.getRandom(9)
     }
 
-    const obj = { x, y, kx, ky }
-    const result = this.checkLocationShip(obj, decks)
+    const obj = { x, y, h, v }
+    const result = this.validateBattlefield(obj, decks)
 
-    if (!result) return this.getCoordsDecks(decks)
+    if (!result) return this.getCoords(decks)
     return obj
   }
 
-  checkLocationShip(obj, decks) {
-    let { x, y, kx, ky } = obj;
+  validateBattlefield(obj, decks) {
+    let { x, y, h, v } = obj
 
-    if (kx === 0 && ((y + decks) > 10)) return false
-    else if (ky === 0 && ((x + decks) > 10)) return false
+    if (h === 0 && ((y + decks) > 10)) return false
+    else if (v === 0 && ((x + decks) > 10)) return false
 
     let dir = [
       [-1, -1], [-1, 0], [-1, 1],
@@ -92,7 +95,7 @@ export default class Gameboard {
     ]
     for (let i = 0; i < decks; i++) {
       if(i === 1) {
-        if(kx === 0) {
+        if(h === 0) {
           dir = [
             [-1, 1], [0, 1], [1, 1]
           ]
@@ -103,8 +106,8 @@ export default class Gameboard {
         }
       }
       for (let s = 0; s < dir.length; s++) {
-        const j = (x + i * kx) + dir[s][0]
-        const k = (y + i * ky) + dir[s][1]
+        const j = (x + i * h) + dir[s][0]
+        const k = (y + i * v) + dir[s][1]
         if (j >= 0 && j < 10 &&
           k >= 0 && k < 10 &&
           this.matrix[j][k] === 1) {

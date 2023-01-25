@@ -30,8 +30,8 @@ export default class Placement {
       return
     }
     const [x, y] = str.split('').map(i => Number(i))
-    const obj = { x, y, kx: this.oldShip.kx, ky: this.oldShip.ky }
-    const result = this.board.checkLocationShip(obj, this.oldShip.decks)
+    const obj = { x, y, h: this.oldShip.h, v: this.oldShip.v }
+    const result = this.board.validateBattlefield(obj, this.oldShip.decks)
     if (result) {
       obj.shipname = this.oldShip.shipname
       obj.decks = this.oldShip.decks
@@ -48,8 +48,8 @@ export default class Placement {
     if (Gameboard.isGameStarted) return
     if (e.target.classList[0] !== 'ship') return
     this.removeShip(e.target.getAttribute('data-name'))
-    const obj = { ...this.oldShip, kx: (this.oldShip.kx == 0) ? 1 : 0, ky: (this.oldShip.ky == 0) ? 1 : 0 }
-    const result = this.board.checkLocationShip(obj, this.oldShip.decks)
+    const obj = { ...this.oldShip, h: (this.oldShip.h === 0) ? 1 : 0, v: (this.oldShip.v === 0) ? 1 : 0 }
+    const result = this.board.validateBattlefield(obj, this.oldShip.decks)
     if (result) {
       const ship = new Ship(this.board, obj)
       ship.createShip()
@@ -67,8 +67,8 @@ export default class Placement {
     this.oldShip = {
       y: obj.y,
       x: obj.x,
-      ky: obj.ky,
-      kx: obj.kx,
+      v: obj.v,
+      h: obj.h,
       decks: obj.arrDecks.length,
       shipname: el
     }

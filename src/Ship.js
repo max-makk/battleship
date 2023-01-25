@@ -1,4 +1,3 @@
-
 export default class Ship {
 
   static drawShip(field, arr, name) {
@@ -12,29 +11,29 @@ export default class Ship {
     })
   }
 
-  constructor(board, { x, y, kx, ky, decks, shipname }) {
+  constructor(board, { x, y, h, v, decks, shipname }) {
     this.board = board
     this.shipname = shipname
     this.decks = decks
     this.x = x
     this.y = y
-    this.kx = kx
-    this.ky = ky
+    this.h = h
+    this.v = v
     this.hits = 0
     this.arrDecks = []
   }
 
   createShip() {
-    let { board, shipname, decks, x, y, kx, ky, hits, arrDecks, k = 0 } = this
+    let { board, shipname, decks, x, y, h, v, hits, arrDecks, k = 0 } = this
 
     while (k < decks) {
-      let i = x + k * kx, j = y + k * ky
+      let i = x + k * h, j = y + k * v
       board.matrix[i][j] = 1
       arrDecks.push([i, j])
       k++
     }
 
-    board.ships[shipname] = { arrDecks, hits, x, y, kx, ky }
+    board.ships[shipname] = { arrDecks, hits, x, y, h, v }
   }
 
 }

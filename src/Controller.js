@@ -64,7 +64,8 @@ export default class Controller {
   }
 
   attack(e) {
-    let x, y
+    let x
+    let y
     if (e !== undefined) {
       if (this.opponent === this.player) return
       if (!e.target.getAttribute('data-xy')) return
@@ -177,19 +178,19 @@ export default class Controller {
     this.currentShip = {
       hits: 0,
       firstHit: [],
-      kx: 0,
-      ky: 0
+      h: 0,
+      v: 0
     }
   }
 
   setCoordsAroundHit(x, y, coords) {
-    let { firstHit, kx, ky } = this.currentShip
+    let { firstHit, h, v } = this.currentShip
 
     if (firstHit.length === 0) {
       this.currentShip.firstHit = [x, y]
-    } else if (kx === 0 && ky === 0) {
-      this.currentShip.kx = (Math.abs(firstHit[0] - x) === 1) ? 1 : 0
-      this.currentShip.ky = (Math.abs(firstHit[1] - y) === 1) ? 1 : 0
+    } else if (h === 0 && v === 0) {
+      this.currentShip.h = (Math.abs(firstHit[0] - x) === 1) ? 1 : 0
+      this.currentShip.v = (Math.abs(firstHit[1] - y) === 1) ? 1 : 0
     }
 
     for (let coord of coords) {
@@ -202,9 +203,9 @@ export default class Controller {
   }
 
   markEmptyCellsAroundShip(ship) {
-    const { hits, kx, ky, x, y } = ship
+    const { hits, h, v, x, y } = ship
     let coords
-    if (ship.hits == 1) {
+    if (ship.hits === 1) {
       coords = [
         [x - 1, y],
         [x + 1, y],
@@ -213,8 +214,8 @@ export default class Controller {
       ]
     } else {
       coords = [
-        [x - kx, y - ky],
-        [x + kx * hits, y + ky * hits]
+        [x - h, y - v],
+        [x + h * hits, y + v * hits]
       ]
     }
     this.markEmptyCell(coords)
@@ -223,9 +224,10 @@ export default class Controller {
   markEmptyCell(coords) {
     let x, y
     for (let coord of coords) {
-      x = coord[0]; y = coord[1]
+      x = coord[0]
+      y = coord[1]
       if (x < 0 || x > 9 || y < 0 || y > 9) continue
-      if (this.opponent.matrix[x][y] == 2 || this.opponent.matrix[x][y] == 3) continue
+      if (this.opponent.matrix[x][y] === 2 || this.opponent.matrix[x][y] === 3) continue
       this.opponent.matrix[x][y] = 2
       if (this.opponent === this.player) {
         this.removeCoordsFromArrays(coord)
